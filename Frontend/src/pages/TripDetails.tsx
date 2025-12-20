@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import { ItineraryResult } from '@/components/planner/ItineraryResult';
 import { Button } from '@/components/ui/button';
 

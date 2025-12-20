@@ -3,7 +3,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Plane, Calendar as CalendarIcon, Wallet, Users } from 'lucide-react';
+import { Plane, Calendar as CalendarIcon, Wallet } from 'lucide-react';
 
 interface TripPlannerFormProps {
     onPlanTrip: (data: any) => void;
