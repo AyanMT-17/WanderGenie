@@ -4,10 +4,8 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+
 
 const signupSchema = z.object({
     name: z.string().min(2, 'Name must be at least 2 characters'),
@@ -23,7 +21,7 @@ type SignupFormData = z.infer<typeof signupSchema>;
 
 export default function Signup() {
     const navigate = useNavigate();
-    const { register: registerUser, isAuthenticated } = useAuth();
+    const { register: registerUser, isAuthenticated, loading } = useAuth();
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -35,9 +33,14 @@ export default function Signup() {
         resolver: zodResolver(signupSchema),
     });
 
+    // Handle initial auth loading
+    if (loading) {
+        return null;
+    }
+
     // Redirect if already logged in
     if (isAuthenticated) {
-        return <Navigate to="/" replace />;
+        return <Navigate to="/home" replace />;
     }
 
     const onSubmit = async (data: SignupFormData) => {
@@ -47,7 +50,7 @@ export default function Signup() {
         try {
             const { confirmPassword, ...registerData } = data;
             await registerUser(registerData);
-            navigate('/');
+            navigate('/home');
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Registration failed. Please try again.');
         } finally {
@@ -56,93 +59,100 @@ export default function Signup() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-background via-background to-muted">
-            <Card className="w-full max-w-md mx-4">
-                <CardHeader className="space-y-1">
-                    <CardTitle className="text-3xl font-bold text-center bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
-                        Create Account
-                    </CardTitle>
-                    <CardDescription className="text-center">
-                        Start planning your dream trips with WanderGenie
-                    </CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="name">Full Name</Label>
-                            <Input
+        <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground relative overflow-hidden">
+            {/* Vintage Paper Texture Overlay */}
+            <div className="absolute inset-0 -z-10 opacity-10 pointer-events-none mix-blend-multiply bg-[url('https://www.transparenttextures.com/patterns/aged-paper.png')]"></div>
+
+            <div className="w-full max-w-md px-8 py-10 relative z-10 border-4 double border-border bg-card shadow-2xl -skew-y-1">
+                {/* Corner Ornaments */}
+                <div className="absolute top-1 left-1 w-4 h-4 border-t-2 border-l-2 border-primary"></div>
+                <div className="absolute top-1 right-1 w-4 h-4 border-t-2 border-r-2 border-primary"></div>
+                <div className="absolute bottom-1 left-1 w-4 h-4 border-b-2 border-l-2 border-primary"></div>
+                <div className="absolute bottom-1 right-1 w-4 h-4 border-b-2 border-r-2 border-primary"></div>
+
+                <div className="text-center mb-8">
+                    <Link to="/" className="text-2xl font-victorian text-primary tracking-widest block mb-4 border-b-2 border-accent pb-4 mx-8 opacity-90">WANDER GENIE</Link>
+                    <h2 className="text-4xl font-script text-foreground mt-2">New Membership</h2>
+                    <p className="text-xs font-serif tracking-[0.2em] text-muted-foreground mt-2 uppercase">Join the Expedition</p>
+                </div>
+
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 px-4">
+                    <div className="space-y-4">
+                        <div className="group relative">
+                            <Label htmlFor="name" className="block text-xs font-serif uppercase tracking-[0.2em] text-muted-foreground mb-1 ml-1">Full Name</Label>
+                            <input
                                 id="name"
                                 type="text"
-                                placeholder="John Doe"
+                                className="input-victorian w-full text-lg bg-transparent text-foreground placeholder:text-muted-foreground placeholder:opacity-30"
                                 {...register('name')}
                                 disabled={isLoading}
                             />
                             {errors.name && (
-                                <p className="text-sm text-destructive">{errors.name.message}</p>
+                                <p className="text-xs text-destructive mt-1 font-serif italic border border-destructive p-1">{errors.name.message}</p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input
+                        <div className="group relative">
+                            <Label htmlFor="email" className="block text-xs font-serif uppercase tracking-[0.2em] text-muted-foreground mb-1 ml-1">Email</Label>
+                            <input
                                 id="email"
                                 type="email"
-                                placeholder="your@email.com"
+                                className="input-victorian w-full text-lg bg-transparent text-foreground placeholder:text-muted-foreground placeholder:opacity-30"
                                 {...register('email')}
                                 disabled={isLoading}
                             />
                             {errors.email && (
-                                <p className="text-sm text-destructive">{errors.email.message}</p>
+                                <p className="text-xs text-destructive mt-1 font-serif italic border border-destructive p-1">{errors.email.message}</p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="password">Password</Label>
-                            <Input
+                        <div className="group relative">
+                            <Label htmlFor="password" className="block text-xs font-serif uppercase tracking-[0.2em] text-muted-foreground mb-1 ml-1">Password</Label>
+                            <input
                                 id="password"
                                 type="password"
-                                placeholder="••••••••"
+                                className="input-victorian w-full text-lg bg-transparent text-foreground placeholder:text-muted-foreground placeholder:opacity-30"
                                 {...register('password')}
                                 disabled={isLoading}
                             />
                             {errors.password && (
-                                <p className="text-sm text-destructive">{errors.password.message}</p>
+                                <p className="text-xs text-destructive mt-1 font-serif italic border border-destructive p-1">{errors.password.message}</p>
                             )}
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="confirmPassword">Confirm Password</Label>
-                            <Input
+                        <div className="group relative">
+                            <Label htmlFor="confirmPassword" className="block text-xs font-serif uppercase tracking-[0.2em] text-muted-foreground mb-1 ml-1">Confirm</Label>
+                            <input
                                 id="confirmPassword"
                                 type="password"
-                                placeholder="••••••••"
+                                className="input-victorian w-full text-lg bg-transparent text-foreground placeholder:text-muted-foreground placeholder:opacity-30"
                                 {...register('confirmPassword')}
                                 disabled={isLoading}
                             />
                             {errors.confirmPassword && (
-                                <p className="text-sm text-destructive">{errors.confirmPassword.message}</p>
+                                <p className="text-xs text-destructive mt-1 font-serif italic border border-destructive p-1">{errors.confirmPassword.message}</p>
                             )}
                         </div>
-
-                        {error && (
-                            <div className="p-3 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md">
-                                {error}
-                            </div>
-                        )}
-
-                        <Button type="submit" className="w-full" disabled={isLoading}>
-                            {isLoading ? 'Creating account...' : 'Create Account'}
-                        </Button>
-                    </form>
-
-                    <div className="mt-6 text-center text-sm">
-                        <span className="text-muted-foreground">Already have an account? </span>
-                        <Link to="/login" className="text-primary hover:underline font-medium">
-                            Login
-                        </Link>
                     </div>
-                </CardContent>
-            </Card>
+
+                    {error && (
+                        <div className="p-4 border-l-2 border-destructive bg-background text-destructive text-sm font-serif italic">
+                            {error}
+                        </div>
+                    )}
+
+                    <button type="submit" className="btn-victorian w-full mt-4" disabled={isLoading}>
+                        {isLoading ? 'Processing...' : 'Register'}
+                    </button>
+                </form>
+
+                <div className="mt-8 pt-4 border-t border-accent opacity-90 text-center text-sm font-serif text-muted-foreground italic">
+                    <span>Already enrolled? </span>
+                    <Link to="/login" className="text-primary font-bold hover:underline decoration-double underline-offset-4">
+                        Login Here
+                    </Link>
+                </div>
+            </div>
         </div>
     );
 }

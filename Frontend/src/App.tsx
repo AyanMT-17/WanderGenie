@@ -11,6 +11,8 @@ import Signup from '@/pages/Signup';
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 
+import LandingPage from '@/pages/LandingPage';
+
 // Layout wrapper for protected routes
 function ProtectedLayout() {
   const { isAuthenticated, loading } = useAuth();
@@ -35,7 +37,8 @@ function ProtectedLayout() {
       <Header />
       <main className="flex-1">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/planner" element={<CreateTrip />} />
           <Route path="/itinerary" element={<ItineraryResult />} />
           <Route path="/trip/:id" element={<TripDetails />} />
@@ -53,6 +56,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             {/* Public routes */}
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 

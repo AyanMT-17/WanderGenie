@@ -12,6 +12,12 @@ export default {
                 md: 'calc(var(--radius) - 2px)',
                 sm: 'calc(var(--radius) - 4px)'
             },
+            fontFamily: {
+                sans: ['var(--font-sans)', 'sans-serif'],
+                serif: ['var(--font-serif)', 'serif'],
+                victorian: ['var(--font-victorian)', 'serif'],
+                script: ['var(--font-script)', 'cursive'],
+            },
             colors: {
                 background: 'var(--background)',
                 foreground: 'var(--foreground)',
